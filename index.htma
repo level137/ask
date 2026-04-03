@@ -1,61 +1,1576 @@
 <!DOCTYPE html>
-<html>
-  <head>
-	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<title>WebCat</title>
-<style>
-         body{background-color:pink;
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHABAICHEN — 傻城网 · 一站式AI模型聚合平台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FAFAFA;
+      --bg-alt: #F2F2F2;
+      --surface: #FFFFFF;
+      --ink: #111111;
+      --ink-mid: #555555;
+      --ink-light: #888888;
+      --ink-faint: #BBBBBB;
+      --accent: #0D9942;
+      --accent-hover: #0B8738;
+      --accent-bg: #EDFCF2;
+      --accent-border: #B8EACC;
+      --border: #E5E5E5;
+      --border-light: #F0F0F0;
+      --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.10);
+      --shadow-card-hover: 0 12px 36px rgba(0,0,0,0.10);
+      --r-sm: 8px;
+      --r-md: 12px;
+      --r-lg: 16px;
+      --r-xl: 20px;
+    }
 
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    h1,h2,h3,h4,h5,h6 {
+      font-family: 'Space Grotesk', sans-serif;
+      line-height: 1.15;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==================== NAV ==================== */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(250,250,250,0.82);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .nav.scrolled {
+      border-bottom-color: var(--border);
+      box-shadow: var(--shadow-xs);
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-logo-mark {
+      width: 34px; height: 34px;
+      background: var(--ink);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .nav-logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo-sub {
+      font-size: 11px;
+      color: var(--ink-light);
+      margin-left: 4px;
+      font-weight: 400;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px;
+      color: var(--ink-mid);
+      transition: color 0.2s;
+      font-weight: 400;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta {
+      background: var(--ink) !important;
+      color: white !important;
+      padding: 8px 20px;
+      border-radius: 100px;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      transition: background 0.2s, transform 0.15s !important;
+    }
+    .nav-cta:hover {
+      background: var(--accent) !important;
+      transform: translateY(-1px);
+    }
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      background: none;
+      border: none;
+    }
+    .nav-hamburger span {
+      width: 20px;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ==================== HERO ==================== */
+    .hero {
+      padding: 140px 0 80px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+    .hero-badge-dot {
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink {
+       0%,100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .hero h1 {
+      font-size: clamp(40px, 5vw, 62px);
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+    .hero h1 .accent { color: var(--accent); }
+    .hero-desc {
+      font-size: 17px;
+      color: var(--ink-mid);
+      line-height: 1.75;
+      max-width: 460px;
+      margin-bottom: 36px;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: white;
+      padding: 14px 30px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(13,153,66,0.25);
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--ink);
+      padding: 14px 28px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 500;
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .btn-secondary:hover {
+      border-color: var(--ink);
+      transform: translateY(-1px);
+    }
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+    }
+    .hero-stat-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .hero-stat-label {
+      font-size: 13px;
+      color: var(--ink-light);
+      margin-top: 2px;
+    }
+
+    /* Hero visual - model logomark wall */
+    .hero-visual {
+      position: relative;
+    }
+    .logomark-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .logomark-cell {
+      aspect-ratio: 1;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--r-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      opacity: 0;
+      transform: scale(0.9) translateY(12px);
+      cursor: default;
+      position: relative;
+    }
+    .logomark-cell.show {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    .logomark-cell:hover {
+      transform: scale(1.06) translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--border);
+      z-index: 2;
+    }
+    .logomark-cell svg {
+      width: 36px;
+      height: 36px;
+    }
+    .logomark-tooltip {
+      position: absolute;
+      bottom: -36px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--ink);
+      color: white;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .logomark-cell:hover .logomark-tooltip {
+      opacity: 1;
+    }
+
+    /* ==================== MARQUEE ==================== */
+    .marquee-section {
+      padding: 28px 0;
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .marquee-track {
+      display: flex;
+      gap: 40px;
+      animation: scroll 35s linear infinite;
+      width: max-content;
+    }
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--ink-light);
+      white-space: nowrap;
+      font-weight: 500;
+    }
+    .marquee-sep {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--ink-faint);
+    }
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ==================== SECTION COMMON ==================== */
+    .section { padding: 100px 0; }
+    .section-header {   text-align: center;
+      margin-bottom: 56px;
+    }
+    .section-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(30px, 3.5vw, 44px);
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+    }
+    .section-desc {
+      font-size: 16px;
+      color: var(--ink-mid);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ==================== MODELS ==================== */
+    .models-section {
+      padding: 100px 0 120px;
+      background: var(--bg);
+    }
+
+    /* Desktop: 3-col grid */
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .model-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--r-xl);
+      padding: 28px 24px;
+      transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    .model-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .model-card:hover {
+      border-color: var(--border);
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-6px);
+    }
+    .model-card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .model-logo-box {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .model-logo-box svg {
+      width: 28px;
+      height: 28px;
+    }
+    .model-info { flex: 1; min-width: 0; }
+    .model-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .model-org {
+      font-size: 12px;
+      color: var(--ink-light);
+      margin-top: 1px;
+    }
+    .model-badge {
+      position: absolute;top: 16px;
+      right: 16px;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 100px;
+      letter-spacing: 0.03em;
+    }
+    .badge-hot { background: #FFF3E0; color: #E65100; }
+    .badge-new { background: var(--accent-bg); color: var(--accent); }
+    .badge-fast { background: #E8F0FE; color: #1A56DB; }
+    .badge-pro { background: #F3E8FF; color: #7C3AED; }
+
+    .model-desc {
+      font-size: 14px;
+      color: var(--ink-mid);
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+    .model-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .model-tag {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--ink-light);
+      background: var(--bg-alt);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    /* Mobile: horizontal carousel */
+    .models-carousel {
+      display: none;
+    }
+    .carousel-track {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: 4px 0 20px;
+      scrollbar-width: none;
+    }
+    .carousel-track::-webkit-scrollbar { display: none; }
+    .carousel-track .model-card {
+      min-width: 300px;
+      max-width: 340px;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+      opacity: 1;
+      transform: none;
+    }
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .carousel-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      padding: 0;
+    }
+    .carousel-dot.active {
+      background: var(--accent);
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    /* ==================== BENEFITS ==================== */
+    .benefits-section {
+      padding: 100px 0;
+      background: var(--ink);
+      color: white;
+    }
+    .benefits-section .section-tag { color: #6BE88E; }
+    .benefits-section .section-title { color: white; }
+    .benefits-section .section-desc { color: rgba(255,255,255,0.5); }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .benefit-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--r-xl);
+      padding: 32px 24px;
+      text-align: center;
+      transition: all 0.3s;
+      opacity: 0;
+      transform: translateY(24px);
+    }.benefit-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .benefit-card:hover {
+      background: rgba(255,255,255,0.10);
+      transform: translateY(-4px);
+    }
+    .benefit-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+    .benefit-num .green { color: #6BE88E; }
+    .benefit-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: white;
+      margin-bottom: 8px;
+    }
+    .benefit-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.6;
+    }
+
+    /* ==================== HOW ==================== */
+    .how-section { padding: 100px 0; }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    .step-card {
+      text-align: center;
+      padding: 40px 28px;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--r-xl);
+      transition: all 0.3s;
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    .step-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .step-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+    .step-num {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--accent-bg);
+      color: var(--accent);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .step-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .step-desc {
+      font-size: 14px;
+      color: var(--ink-mid);
+      line-height: 1.65;
+    }
+
+    /* ==================== TESTIMONIALS ==================== */
+    .testimonials-section {
+      padding: 100px 0;
+      background: var(--bg-alt);
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .testimonial-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--r-xl);
+      padding: 28px;
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    .testimonial-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }   .testimonial-stars {
+      color: #F59E0B;
+      font-size: 14px;
+      margin-bottom: 14px;
+      letter-spacing: 2px;
+    }
+    .testimonial-text {
+      font-size: 14px;
+      color: var(--ink-mid);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .testimonial-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .av-1 { background: var(--accent-bg); color: var(--accent); }
+    .av-2 { background: #E8F0FE; color: #1A56DB; }
+    .av-3 { background: #FFF3E0; color: #E65100; }
+    .testimonial-name {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .testimonial-role {
+      font-size: 12px;
+      color: var(--ink-light);
+    }
+
+    /* ==================== CTA ==================== */
+    .cta-section {
+      padding: 100px 0;
+    }
+    .cta-box {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: 24px;
+      padding: 72px 48px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    .cta-box.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+    }
+    .cta-title {
+      font-size: clamp(30px, 3.5vw, 42px);
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+    }
+    .cta-desc {
+      font-size: 16px;
+      color: var(--ink-mid);
+      max-width: 460px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .cta-note {
+      font-size: 12px;
+      color: var(--ink-light);
+    }
+
+    /* ==================== FOOTER ==================== */
+    footer {
+      padding: 56px 0 32px;
+      border-top: 1px solid var(--border-light);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }  .footer-brand-desc {
+      font-size: 13px;
+      color: var(--ink-light);
+      line-height: 1.65;
+      margin-top: 12px;
+      max-width: 260px;
+    }
+    .footer-col-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-light);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+    .footer-col-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-col-links a {
+      font-size: 13px;
+      color: var(--ink-mid);
+      transition: color 0.2s;
+    }
+    .footer-col-links a:hover { color: var(--ink); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-light);
+    }
+    .footer-copy {
+      font-size: 12px;
+      color: var(--ink-light);
+    }
+    .footer-bottom-links {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-bottom-links a {
+      font-size: 12px;
+      color: var(--ink-light);
+      transition: color 0.2s;
+    }
+    .footer-bottom-links a:hover { color: var(--ink); }
+
+    /* ==================== MOBILE NAV OVERLAY ==================== */
+    .mobile-nav-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(250,250,250,0.97);
+      backdrop-filter: blur(20px);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+    .mobile-nav-overlay.open { display: flex; }
+    .mobile-nav-overlay a {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      transition: color 0.2s;
+    }
+    .mobile-nav-overlay a:hover { color: var(--accent); }
+    .mobile-nav-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: var(--ink);
+      padding: 8px;
+    }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 1024px) {
+      .models-grid { grid-template-columns: repeat(2, 1fr); }
+      .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+
+      .hero { padding: 110px 0 60px; }
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }  .hero-visual { order: -1; }
+      .logomark-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
       }
-       h1{
-          color:  red;
-          text-align:center;
-          margin-top:  200px;
-          
-       }
+      .logomark-cell svg { width: 28px; height: 28px; }
 
-         
+      .hero-stats { gap: 24px; }
+      .hero-stat-num { font-size: 22px; }
 
-        input,button{
-                 display:block;
-                 margin:  0   auto;
-                 font-size:   20px;
-                 margin-top:10px;
-          }
-</style>
-  </head>
-  <body>	
-	  <h1>请输入密码进入</h1>
-      <input   type="text"/>
-      <button>确定</button>
-    
+      /* Switch to carousel on mobile */
+      .models-grid { display: none; }
+      .models-carousel { display: block; }
 
-       <script>
-                let button = document.querySelector("button")
-                //按钮点击事件
-                button.onclick = function(){
-                      //获取输入框的密码
-                    
-                   let  input = document.querySelector("input")
-                     //如果输入的密码等于666 则输入正确
-                  if(input.value=="666"){
-                     document.body. innerHTML    =    "<h1>你成功浪费了你人生中宝贵的1秒</h1>"
+      .benefits-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .benefit-num { font-size: 28px; }
 
+      .steps-grid { grid-template-columns: 1fr; gap: 16px; }
+      .testimonials-grid { grid-template-columns: 1fr; }
 
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
 
-                     }else{
-                      alert("密码错误,请重新输入");
+      .cta-box { padding: 48px 24px; }
+      .cta-actions { flex-direction: column; }
+      .cta-actions .btn-primary,
+      .cta-actions .btn-secondary { width: 100%; justify-content: center; }
+    }
 
+    @media (max-width: 480px) {
+      .logomark-grid { grid-template-columns: repeat(3, 1fr); }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .hero-actions .btn-primary,
+      .hero-actions .btn-secondary { justify-content: center; }
+      .hero-stats { flex-direction: column; gap: 12px; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
 
-            }
-             
-                 
+    /* ==================== ANIMATIONS ==================== */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .d1 { transition-delay: 0.05s; }
+    .d2 { transition-delay: 0.10s; }
+    .d3 { transition-delay: 0.15s; }
+    .d4 { transition-delay: 0.20s; }
+    .d5 { transition-delay: 0.25s; }
+    .d6 { transition-delay: 0.30s; }
+    .d7 { transition-delay: 0.35s; }
+    .d8 { transition-delay: 0.40s; }
+    .d9 { transition-delay: 0.45s; }
+  </style>
+</head>
+<body>
 
-     }
-    
+<!-- ===== NAV ===== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <div class="nav-logo-mark">S</div>
+      <span class="nav-logo-text">SHABAICHEN<span class="nav-logo-sub"> 傻城网</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#models">全部模型</a></li>
+      <li><a href="#benefits">注册权益</a></li>
+      <li><a href="#how">使用流程</a></li>
+      <li><a href="#testimonials">用户评价</a></li>
+      <li><a href="#cta" class="nav-cta">免费注册</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
 
-       </script>
-       
+<!-- Mobile nav -->
+<div class="mobile-nav-overlay" id="mobileNav">
+  <button class="mobile-nav-close" id="mobileNavClose">&times;</button>
+  <a href="#models" class="mobile-nav-link">全部模型</a>
+  <a href="#benefits" class="mobile-nav-link">注册权益</a>
+  <a href="#how" class="mobile-nav-link">使用流程</a>
+  <a href="#testimonials" class="mobile-nav-link">用户评价</a>
+  <a href="#cta" class="mobile-nav-link" style="color:var(--accent)">免费注册</a>
+</div>
 
-  </body>
-</html
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          已接入 12+ 顶级 AI 模型
+        </div>     <h1>一个入口，<br>访问<span class="accent">全部</span>AI</h1>
+        <p class="hero-desc">SHABAICHEN 傻城网聚合全球领先的大语言模型，注册即送海量 Token，无需科学上网，在线免费体验 ChatGPT、DeepSeek、Claude 等顶尖AI。</p>
+        <div class="hero-actions">
+          <a href="#cta" class="btn-primary">
+            立即免费注册
+            <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#models" class="btn-secondary">查看全部模型</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-num">280万+</div>
+            <div class="hero-stat-label">注册用户</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">12+</div>
+            <div class="hero-stat-label">AI 模型</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">99.9%</div>
+            <div class="hero-stat-label">可用率</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="logomark-grid" id="logomarkGrid">
+          <!-- OpenAI -->
+          <div class="logomark-cell d1">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M22.1 10.7a5.2 5.2 0 0 0-3-3.7 5.3 5.3 0 0 0-4.7.3A5.2 5.2 0 0 0 12 4.4a5.3 5.3 0 0 0-4 1.6 5.2 5.2 0 0 0-1.2 4.4 5.2 5.2 0 0 0 3 3.7 5.3 5.3 0 0 0 4.7-.3A5.2 5.2 0 0 0 16 16.8a5.3 5.3 0 0 0 4-1.6 5.2 5.2 0 0 0 1.2-4.4Z" fill="#10A37F"/><path d="M15.5 17.2a5.2 5.2 0 0 0 2.4 3 5.3 5.3 0 0 0 4.7.3A5.2 5.2 0 0 0 23.8 16a5.3 5.3 0 0 0-.3-4.7 5.2 5.2 0 0 0-3-3 5.2 5.2 0 0 0-4.4 1.2" stroke="#10A37F" stroke-width="1.4" fill="none"/><path d="M12.5 10.8a5.2 5.2 0 0 0-2.4-3A5.3 5.3 0 0 0 5.4 7.5 5.2 5.2 0 0 0 4.2 12a5.3 5.3 0 0 0 .3 4.7 5.2 5.2 0 0 0 3 3 5.2 5.2 0 0 0 4.4-1.2" stroke="#10A37F" stroke-width="1.4" fill="none"/></svg>
+            <span class="logomark-tooltip">ChatGPT 5.0</span>
+          </div>
+          <!-- DeepSeek -->
+          <div class="logomark-cell d2">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M19.5 7c-1.5 2-2.5 4.5-2 7 .2 1-.3 2-1 2.5s-1.5.3-2-.5c-.3-.5-.8-.8-1.3-.8-.3 0-.5.1-.7.3-.5.5-1.5.5-2.5.2-1.5-.5-3-1.5-4-3.5-.3-.5 0-1 .5-1 .3 0 .5.2.7.4.8 1.2 1.8 2 2.8 2.3 1 .3 1.5 0 1.8-.5.5-.8.3-1.8-.3-2.5-.5-.5-.8-1.2-.5-2 .2-.5.8-.8 1.3-.8.5 0 1 .3 1.3.8.5.8 1.3 1.2 2 1.2.8 0 1.3-.5 1.5-1 .5-1.5 1-3 2-4.3.3-.5.8-.5 1.2-.2.3.3.5.5.5.8Z" fill="#4D6BFE"/><circle cx="17.5" cy="10" r="1" fill="white"/></svg>
+            <span class="logomark-tooltip">DeepSeek R3</span>
+          </div>
+          <!-- Anthropic -->
+          <div class="logomark-cell d3">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M14 5L7.5 23h3l1.8-5h3.4l1.8 5h3L14 5Zm-1.2 11.5L14 11l1.2 5.5h-2.4Z" fill="#D97706"/></svg>
+            <span class="logomark-tooltip">Claude Opus 4</span>
+          </div>
+          <!-- Google Gemini -->
+          <div class="logomark-cell d4">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M14 3C8 3 3 8 3 14c0 3.5 1.7 6.7 4.3 8.7" stroke="#4285F4" stroke-width="4" stroke-linecap="round"/><path d="M14 3c6 0 11 5 11 11 0 3.5-1.7 6.7-4.3 8.7" stroke="#EA4335" stroke-width="4" stroke-linecap="round"/><path d="M7 22.7C9 24.5 11.4 25.5 14 25.5c2.6 0 5-1 7-2.8" stroke="#FBBC04" stroke-width="4" stroke-linecap="round"/><path d="M25 14c0-6-5-11-11-11" stroke="#34A853" stroke-width="4" stroke-linecap="round"/></svg>
+            <span class="logomark-tooltip">Gemini Ultra</span>
+          </div>
+          <!-- Meta Llama -->
+          <div class="logomark-cell d5">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M14 4c-3 0-5.5 1.5-7 4-1 1.8-1 4 0 6 .5 1 1.3 2 2.2 2.7" stroke="#0668E1" stroke-width="1.8" fill="none"/><path d="M9.2 16.7c1 .7 2.2 1 3.3 1h3c1.1 0 2.3-.3 3.3-1" stroke="#0668E1" stroke-width="1.8" fill="none"/><path d="M18.8 16.7c.9-.7 1.7-1.7 2.2-2.7 1-2 1-4.2 0-6-1.5-2.5-4-4-7-4" stroke="#0668E1" stroke-width="1.8" fill="none"/><circle cx="11" cy="12" r="1.5" fill="#0668E1"/><circle cx="17" cy="12" r="1.5" fill="#0668E1"/><path d="M14 18v5M10 21h8" stroke="#0668E1" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span class="logomark-tooltip">Llama 4</span>
+          </div>
+          <!-- Qwen -->
+          <div class="logomark-cell d6">
+            <svg viewBox="0 0 28 28" fill="none"><rect x="6" y="6" width="16" height="16" rx="4" stroke="#6E40C9" stroke-width="1.8"/><path d="M10 11h8M10 14h5M10 17h6" stroke="#6E40C9" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span class="logomark-tooltip">Qwen Max</span>
+          </div>
+          <!-- Kimi -->
+          <div class="logomark-cell d7">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M8 8h4v12H8V8ZM14 8h6c3.3 0 6 2.7 6 6s-2.7 6-6 6h-6V8Z" fill="#1772F6"/><circle cx="20" cy="14" r="2.5" fill="white"/></svg>
+            <span class="logomark-tooltip">Kimi K2</span>
+          </div>
+          <!-- Mistral -->
+          <div class="logomark-<!-- ===== MARQUEE ===== -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-item"><span class="marquee-sep"></span>ChatGPT 5.0</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>DeepSeek R3</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Claude Opus 4</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Gemini Ultra</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Llama 4</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Qwen Max</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Kimi K2</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Mistral Large</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>GLM-5</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Ernie 4.5</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Doubao Pro</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>GML-4</span>
+    <!-- duplicate -->
+    <span class="marquee-item"><span class="marquee-sep"></span>ChatGPT 5.0</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>DeepSeek R3</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Claude Opus 4</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Gemini Ultra</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Llama 4</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Qwen Max</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Kimi K2</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Mistral Large</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>GLM-5</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Ernie 4.5</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Doubao Pro</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>GML-4</span>
+  </div>
+</div>
+
+<!-- ===== MODELS ===== -->
+<section class="models-section" id="models">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-tag">Supported Models</div>
+      <h2 class="section-title">接入全球顶尖 AI 模型</h2>
+      <p class="section-desc">一个账号即可切换使用所有模型，无需分别注册，无需科学上网。</p>
+    </div>
+
+    <!-- Desktop grid -->
+    <div class="models-grid" id="modelsGrid">
+
+      <!-- ChatGPT -->
+      <div class="model-card d1">
+        <span class="model-badge badge-hot">热门</span>
+        <div class="model-card-header">
+          <div class="model-logo-box" style="background:#F0FBF6">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M22.1 10.7a5.2 5.2 0 0 0-3-3.7 5.3 5.3 0 0 0-4.7.3A5.2 5.2 0 0 0 12 4.4a5.3 5.3 0 0 0-4 1.6 5.2 5.2 0 0 0-1.2 4.4 5.2 5.2 0 0 0 3 3.7 5.3 5.3 0 0 0 4.7-.3A5.2 5.2 0 0 0 16 16.8a5.3 5.3 0 0 0 4-1.6 5.2 5.2 0 0 0 1.2-4.4Z" fill="#10A37F"/></svg>
+          </div>
+          <div class="model-info">
+            <div class="model-name">ChatGPT 5.0</div>
+            <div class="model-org">OpenAI · 1T Parameters</div>
+          </div>
+        </div>
+        <p class="model-desc">最新旗舰级大模型，1M 上下文窗口，推理、创作、编程全面领先。支持多模态输入输出。</p>
+        <div class="model-tags">
+          <span class="model-tag">推理</span>
+          <span class="model-tag">编程</span>
+          <span class="model-tag">创作</span>
+          <span class="model-tag">多模态</span>
+        </div>
+      </div>
+
+      <!-- DeepSeek -->
+      <div class="model-card d2">
+        <span class="model-badge badge-hot">热门</span>
+        <div class="model-card-header">
+          <div class="model-logo-box" style="background:#EEF2FF">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M19.5 7c-1.5 2-2.5 4.5-2 7 .2 1-.3 2-1 2.5s-1.5.3-2-.5c-.3-.5-.8-.8-1.3-.8-.3 0-.5.1-.7.3-.5.5-1.5.5-2.5.2-1.5-.5-3-1.5-4-3.5-.3-.5 0-1 .5-1 .3 0 .5.2.7.4.8 1.2 1.8 2 2.8 2.3 1 .3 1.5 0 1.8-.5.5-.8.3-1.8-.3-2.5-.5-.5-.8-1.2-.5-2 .2-.5.8-.8 1.3-.8.5 0 1 .3 1.3.8.5.8 1.3 1.2 2 1.2.8 0 1.3-.5 1.5-1 .5-1.5 1-3 2-4.3.3-.5.8-.5 1.2-.2.3.3.5.5.5.8Z" fill="#4D6BFE"/><circle cx="17.5" cy="10" r="1" fill="white"/></svg>
+          </div>
+          <div class="model-info">
+            <div class="model-name">DeepSeek R3</div>
+            <div class="model-org">DeepSeek · MoE Architecture</div>
+          </div>
+        </div>
+        <p class="model-desc">国产开源之光，MoE 架构实现高效推理，代码能力尤为突出，极致性价比之选。</p>
+        <div class="model-tags">
+          <span class="model-tag">开源</span>
+          <span class="model-tag">代码</span>
+          <span class="model-tag">推理</span>
+          <span class="model-tag">高性价比</span>
+        </div>
+      </div>
+
+      <!-- Claude -->
+      <div class="model-card d3">
+        <div class="model-card-header">
+          <div class="model-logo-box" style="background:#FFFBEB">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M14 5L7.5 23h3l1.8-5h3.4l1.8 5h3L14 5Zm-1.2 11.5L1
+<!-- ===== MODELS ===== -->
+<section class="models-section" id="models">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-tag">Supported Models</div>
+      <h2 class="section-title">接入全球顶尖 AI 模型</h2>
+      <p class="section-desc">一个账号即可切换使用所有模型，无需分别注册，无需科学上网。</p>
+    </div>
+
+    <!-- Desktop grid -->
+    <div class="models-grid" id="modelsGrid">
+
+      <!-- ChatGPT -->
+      <div class="model-card d1">
+        <span class="model-badge badge-hot">热门</span>
+        <div class="model-card-header">
+          <div class="model-logo-box" style="background:#F0FBF6">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M22.1 10.7a5.2 5.2 0 0 0-3-3.7 5.3 5.3 0 0 0-4.7.3A5.2 5.2 0 0 0 12 4.4a5.3 5.3 0 0 0-4 1.6 5.2 5.2 0 0 0-1.2 4.4 5.2 5.2 0 0 0 3 3.7 5.3 5.3 0 0 0 4.7-.3A5.2 5.2 0 0 0 16 16.8a5.3 5.3 0 0 0 4-1.6 5.2 5.2 0 0 0 1.2-4.4Z" fill="#10A37F"/></svg>
+          </div>
+          <div class="model-info">
+            <div class="model-name">ChatGPT 5.0</div>
+            <div class="model-org">OpenAI · 1T Parameters</div>
+          </div>
+        </div>
+        <p class="model-desc">最新旗舰级大模型，1M 上下文窗口，推理、创作、编程全面领先。支持多模态输入输出。</p>
+        <div class="model-tags">
+          <span class="model-tag">推理</span>
+          <span class="model-tag">编程</span>
+          <span class="model-tag">创作</span>
+          <span class="model-tag">多模态</span>
+        </div>
+      </div>
+
+      <!-- DeepSeek -->
+      <div class="model-card d2">
+        <span class="model-badge badge-hot">热门</span>
+        <div class="model-card-header">
+          <div class="model-logo-box" style="background:#EEF2FF">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M19.5 7c-1.5 2-2.5 4.5-2 7 .2 1-.3 2-1 2.5s-1.5.3-2-.5c-.3-.5-.8-.8-1.3-.8-.3 0-.5.1-.7.3-.5.5-1.5.5-2.5.2-1.5-.5-3-1.5-4-3.5-.3-.5 0-1 .5-1 .3 0 .5.2.7.4.8 1.2 1.8 2 2.8 2.3 1 .3 1.5 0 1.8-.5.5-.8.3-1.8-.3-2.5-.5-.5-.8-1.2-.5-2 .2-.5.8-.8 1.3-.8.5 0 1 .3 1.3.8.5.8 1.3 1.2 2 1.2.8 0 1.3-.5 1.5-1 .5-1.5 1-3 2-4.3.3-.5.8-.5 1.2-.2.3.3.5.5.5.8Z" fill="#4D6BFE"/><circle cx="17.5" cy="10" r="1" fill="white"/></svg>
+          </div>
+          <div class="model-info">
+            <div class="model-name">DeepSeek R3</div>
+            <div class="model-org">DeepSeek · MoE Architecture</div>
+          </div>
+        </div>
+        <p class="model-desc">国产开源之光，MoE 架构实现高效推理，代码能力尤为突出，极致性价比之选。</p>
+        <div class="model-tags">
+          <span class="model-tag">开源</span>
+          <span class="model-tag">代码</span>
+          <span class="model-tag">推理</span>
+          <span class="model-tag">高性价比</span>
+        </div>
+      </div>
+
+      <!-- Claude -->
+      <div class="model-card d3">
+        <div class="model-card-header">
+          <div class="model-logo-box" style="background:#FFFBEB">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M14 5L7.5 23h3l1.8-5h3.4l1.8 5h3L14 5Zm-1.2 11.5L14 11l1.2 5.5h-2.4Z" fill="#D97706"/></svg>
+          </div>
+          <div class="model-info">
+            <div class="model-name">Claude Opus 4</div>
+            <div class="model-org">Anthropic · Constitutional AI</div>
+          </div>
+        </div>
+        <p class="model-desc">以安全著称的顶级模型，200K 超长上下文，长文理解与深度分析能力无出其右。</p>
+        <div class="model-tags">
+          <span class="model-tag">安全</span>
+          <span class="model-tag">长文本</span>
+          <span class="model-tag">分析</span>
+          <span class="model-tag">写作</span>
+        </div>
+      </div>
+
+      <!-- Gemini -->
+      <div class="model-card d4">
+        <span class="model-badge badge-new">新上线</span>
+        <div class="model-card-header">
+          <div class="model-logo-box" style="background:#FFF8F0">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M14 3C8 3 3 8 3 14" stroke="#4285F4" stroke-width="3.5" stroke-linecap="round"/><path d="M14 3c6 0 11 5 11 11" stroke="#EA4335" stroke-width="3.5" stroke-linecap="round"/><path d="M3 14c0 6 5 11 11 11" stroke="#FBBC04" stroke-width="3.5" stroke-linecap="round"/><path d="M25 14c0 6-5 11-11 11" stroke="#34A853" stroke-width="3.5" stroke-linecap="round"/></svg>
+          </div>       <div class="model-info">
+            <div class="model-name">Gemini Ultra</div>
+            <div class="model-org">Google DeepMind</div>
+          </div>
+        </div>
+        <p class="model-desc">原生多模态架构，文本、图像、视频、代码统一处理，与 Google 生态深度整合。</p>
+        <div class="model-tags">
+          <span class="model-tag">多模态</span>
+          <span class="model-tag">图像</span>
+          <span class="model-tag">视频</span>
+          <span class="model-tag">搜索</span>
+        </div>
+      </div>
+
+      <!-- Llama -->
+      <div class="model-card d5">
+        <span class="model-badge badge-fast">极速</span>
+        <div class="model-card-header">
+          <div class="model-logo-box" style="background:#EEF2FF">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M14 4c-3 0-5.5 1.5-7 4-1 1.8-1 4 0 6 .5 1 1.3 2 2.2 2.7" stroke="#0668E1" stroke-width="1.6" fill="none"/><path d="M9.2 16.7c1 .7 2.2 1 3.3 1h3c1.1 0 2.3-.3 3.3-1" stroke="#0668E1" stroke-width="1.6" fill="none"/><path d="M18.8 16.7c.9-.7 1.7-1.7 2.2-2.7 1-2 1-4.2 0-6-1.5-2.5-4-4-7-4" stroke="#0668E1" stroke-width="1.6" fill="none"/><circle cx="11" cy="12" r="1.5" fill="#0668E1"/><circle cx="17" cy="12" r="1.5" fill="#0668E1"/><path d="M14 18v5M10 21h8" stroke="#0668E1" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <div class="model-info">
+            <div class="model-name">Llama 4</div>
+            <div class="model-org">Meta AI · Open Source</div>
+          </div>
+        </div>
+        <p class="model-desc">Meta 最新开源大模型，MoE 架构带来极致推理速度，完全开源可商用。</p>
+        <div class="model-tags">
+          <span class="model-tag">开源</span>
+          <span class="model-tag">极速</span>
+          <span class="model-tag">可商用</span>
+          <span class="model-tag">MoE</span>
+        </div>
+      </div>
+
+      <!-- Qwen -->
+      <div class="model-card d6">
+        <div class="model-card-header">
+          <div class="model-logo-box" style="background:#F5F0FF">
+            <svg viewBox="0 0 28 28" fill="none"><rect x="6" y="6" width="16" height="16" rx="4" stroke="#6E40C9" stroke-width="1.6"/><path d="M10 11h8M10 14h5M10 17h6" stroke="#6E40C9" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </div>
+          <div class="model-info">
+            <div class="model-name">Qwen Max</div>
+            <div class="model-org">Alibaba Cloud · 通义千问</div>
+          </div>
+        </div>
+        <p class="model-desc">阿里云旗舰模型，中文理解能力行业领先，支持超长文本与多轮复杂对话。</p>
+        <div class="model-tags">
+          <span class="model-tag">中文优化</span>
+          <span class="model-tag">对话</span>
+          <span class="model-tag">知识问答</span>
+        </div>
+      </div>
+ <!-- Kimi -->
+      <div class="model-card d7">
+        <span class="model-badge badge-pro">长文本</span>
+        <div class="model-card-header">
+          <div class="model-logo-box" style="background:#EEF4FF">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M8 8h4v12H8V8ZM14 8h6c3.3 0 6 2.7 6 6s-2.7 6-6 6h-6V8Z" fill="#1772F6"/><circle cx="20" cy="14" r="2.5" fill="white"/></svg>
+          </div>
+          <div class="model-info">
+            <div class="model-name">Kimi K2</div>
+            <div class="model-org">Moonshot AI · 月之暗面</div>
+          </div>
+        </div>
+        <p class="model-desc">超长上下文处理专家，支持 200 万字输入，文件解析与信息检索能力出色。</p>
+        <div class="model-tags">
+          <span class="model-tag">超长文本</span>
+          <span class="model-tag">文件解析</span>
+          <span class="model-tag">搜索</span>
+        </div>
+      </div>
+
+      <!-- Mistral -->
+      <div class="model-card d8">
+        <div class="model-card-header">
+          <div class="model-logo-box" style="background:#FFFBEB">
+            <svg viewBox="0 0 28 28" fill="none"><rect x="4" y="4" width="8" height="8" rx="1.5" fill="#FFAF00"/><rect x="16" y="4" width="8" height="8" rx="1.5" fill="#FFAF00"/><rect x="4" y="16" width="8" height="8" rx="1.5" fill="#FFAF00"/><rect x="16" y="16" width="8" height="8" rx="1.5" fill="white" stroke="#FFAF00" stroke-width="1.5"/></svg>
+          </div>
+          <div class="model-info">
+            <div class="model-name">Mistral Large</div>
+            <div class="model-org">Mistral AI · European AI</div>
+          </div>
+        </div>
+        <p class="model-desc">欧洲最强开源模型，多语言能力突出，代码与推理表现均衡稳定。</p>
+        <div class="model-tags">
+          <span class="model-tag">多语言</span>
+          <span class="model-tag">代码</span>
+          <span class="model-tag">开源</span>
+        </div>
+      </div>
+
+      <!-- GLM -->
+      <div class="model-card d9">
+        <div class="model-card-header">
+          <div class="model-logo-box" style="background:#EEF4FF">
+            <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="10" stroke="#4A90D9" stroke-width="1.6" fill="none"/><path d="M10 10v8l6-4-6-4Z" fill="#4A90D9"/></svg>
+          </div>
+          <div class="model-info">
+            <div class="model-name">GLM-5</div>
+            <div class="model-org">智谱 AI · Zhipu</div>
+          </div>
+        </div>
+        <p class="model-desc">清华系大模型，中文语义理解深度优秀，学术与专业领域表现亮眼。</p>
+        <div class="model-tags">
+          <span class="model-tag">中文</span>
+          <span class="model-tag">学术</span>
+          <span class="model-tag">专业领域</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile carousel -->
+    <div class="models-carousel" id="modelsCarousel">
+      <div class="carousel-track" id="carouselTrack">
+        <!-- Cards cloned by JS -->
+      </div>
+      <div class="carousel-dots" id="carouselDots"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== BENEFITS ===== -->
+<section class="benefits-section" id="benefits">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-tag">Register Benefits</div>
+      <h2 class="section-title">注册即享超值权益</h2>
+      <p class="section-desc">新用户注册立送海量 Token 额度，零门槛体验全球顶级AI。</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card d1">
+        <div class="benefit-num">10,000</div>
+        <div class="benefit-label">注册即送 Token</div>
+        <p class="benefit-desc">完成注册立即到账，可体验平台全部模型，无使用门槛。</p>
+      </div>
+      <div class="benefit-card d2">
+        <div class="benefit-num"><span class="green">100万</span></div>
+        <div class="benefit-label">邀请奖励 Token</div>
+        <p class="benefit-desc">每邀请一位好友注册，双方各获百万 Token，上不封顶。</p>
+      </div>
+      <div class="benefit-card d3">
+        <div class="benefit-num">免费</div>
+        <div class="benefit-label">在线体验入口</div>
+        <p class="benefit-desc">提供免费体验通道，无需付费感受不同模型的能力差异。</p>
+      </div>
+      <div class="benefit-card d4">
+        <div class="benefit-num">24/7</div>
+        <div class="benefit-label">全天候稳定服务</div>
+        <p class="benefit-desc">多节点部署，智能负载均衡，任何时段流畅稳定。</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ===== HOW ===== -->
+<section class="how-section" id="how">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-tag">How It Works</div>
+      <h2 class="section-title">三步开始使用</h2>
+      <p class="section-desc">极简流程，从注册到对话只需一分钟。</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card d1">
+        <div class="step-num">01</div>
+        <h3 class="step-title">注册账号</h3>
+        <p class="step-desc">手机号或邮箱快速注册，30 秒完成，立即获得 10,000 Token。</p>
+      </div>
+      <div class="step-card d2">
+        <div class="step-num">02</div>
+        <h3 class="step-title">选择模型</h3>
+        <p class="step-desc">在模型列表中选择你需要的 AI，支持 ChatGPT、DeepSeek、Claude 等十余款。</p>
+      </div>
+      <div class="step-card d3">
+        <div class="step-num">03</div>
+        <h3 class="step-title">开始对话</h3>
+        <p class="step-desc">输入你的问题或指令，AI 即刻响应。支持多轮对话、文件上传、代码执行。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials-section" id="testimonials">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-tag">User Feedback</div>
+      <h2 class="section-title">用户真实评价</h2>
+      <p class="section-desc">来自不同领域用户的真实使用体验。</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card d1">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">终于不用分别注册好几个AI平台了，傻城网一个账号全搞定。DeepSeek R3 写代码又快又准，Token 还很便宜。</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar av-1">张</div>
+          <div>
+            <div class="testimonial-name">张同学</div>
+            <div class="testimonial-role">计算机科学研究生</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card d2">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">ChatGPT 5.0 分析数据，Claude 写报告，效率提升至少三倍。注册就送 Token 这点太良心了。</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar av-2">李</div>
+          <div>
+            <div class="testimonial-name">李经理</div>
+            <div class="testimonial-role">互联网产品经理</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card d3">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">作为自由撰稿人，不同AI写作风格各有特色。傻城网让我随时切换，找到最适合当前任务的模型。</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar av-3">王</div>
+          <div>
+            <div class="testimonial-name">王老师</div>
+            <div class="testimonial-role">自由撰稿人</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <div class="cta-box fade-up">
+      <h2 class="cta-title">现在开始，免费体验</h2>
+      <p class="cta-desc">注册即送 10,000 Token，邀请好友更可获得百万 Token。零门槛接入全球顶级 AI。</p>
+      <div class="cta-actions">
+        <a href="#" class="btn-primary">
+          免费注册，领取 Token
+          <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#" class="btn-secondary">了解更多</a>
+      </div>
+      <p class="cta-note">无需信用卡 · 随时取消 · 数据加密存储</p>
+    </div>
+  </div>
+</section>
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#" class="nav-brand">
+          <div class="nav-logo-mark">S</div>
+          <span class="nav-logo-text">SHABAICHEN<span class="nav-logo-sub"> 傻城网</span></span>
+        </a>
+        <p class="footer-brand-desc">一站式 AI 模型聚合平台，让每个人都能平等、便捷地使用全球最先进的人工智能技术。</p>
+      </div>
+      <div>
+        <div class="footer-col-title">产品</div>
+        <ul class="footer-col-links">
+          <li><a href="#">全部模型</a></li>
+          <li><a href="#">API 接口</a></li>
+          <li><a href="#">定价方案</a></li>
+          <li><a href="#">更新日志</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">资源</div>
+        <ul class="footer-col-links">
+          <li><a href="#">使用文档</a></li>
+          <li><a href="#">常见问题</a></li>
+          <li><a href="#">模型对比</a></li>
+          <li><a href="#">开发者社区</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">关于</div>
+        <ul class="footer-col-links">
+          <li><a href="#">关于我们</a></li>
+          <li><a href="#">联系方式</a></li>
+          <li><a href="#">服务条款</a></li>
+          <li><a href="#">隐私政策</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">&copy; 2026 SHABAICHEN 傻城网. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="#">服务条款</a>
+        <a href="#">隐私政策</a>
+        <a href="#">Cookie 设置</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== NAV SCROLL =====
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// ===== MOBILE NAV =====
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobileNav');
+const mobileNavClose = document.getElementById('mobileNavClose');
+
+hamburger.addEventListener('click', () => mobileNav.classList.add('open'));
+mobileNavClose.addEventListener('click', () => mobileNav.classList.remove('open'));
+document.querySelectorAll('.mobile-nav-link').forEach(link => {
+  link.addEventListener('click', () => mobileNav.classList.remove('open'));
+});
+
+// ===== SCROLL ANIMATIONS =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('.fade-up, .model-card, .benefit-card, .step-card, .testimonial-card, .cta-box').forEach(el => {
+  observer.observe(el);
+});
+
+// ===== LOGOMARK GRID ANIMATION =====
+const logoObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const cells = entry.target.querySelectorAll('.logomark-cell');
+      cells.forEach((cell, i) => {
+        setTimeout(() => cell.classList.add('show'), i * 80);
+      });
+      logoObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+const logoGrid = document.getElementById('logomarkGrid');
+if (logoGrid) logoObserver.observe(logoGrid);
+
+// ===== MOBILE CAROUSEL =====
+function buildCarousel() {
+  const grid = document.getElementById('modelsGrid');
+  const track = document.getElementById('carouselTrack');
+  const dotsContainer = document.getElementById('carouselDots');
+  if (!grid || !track) return;
+  // Clone cards
+  track.innerHTML = '';
+  const cards = grid.querySelectorAll('.model-card');
+  cards.forEach(card => {
+    const clone = card.cloneNode(true);
+    clone.style.opacity = '1';
+    clone.style.transform = 'none';
+    clone.classList.add('visible');
+    track.appendChild(clone);
+  });
+
+  // Build dots
+  dotsContainer.innerHTML = '';
+  for (let i = 0; i < cards.length; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => {
+      const cardWidth = track.querySelector('.model-card').offsetWidth + 16;
+      track.scrollTo({ left: cardWidth * i, behavior: 'smooth' });
+    });
+    dotsContainer.appendChild(dot);
+  }
+
+  // Update dots on scroll
+  track.addEventListener('scroll', () => {
+    const cardWidth = track.querySelector('.model-card').offsetWidth + 16;
+    const index = Math.round(track.scrollLeft / cardWidth);
+    dotsContainer.querySelectorAll('.carousel-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === index);
+    });
+  });
+}
+
+buildCarousel();
+window.addEventListener('resize', buildCarousel);
+
+// ===== SMOOTH SCROLL =====
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
